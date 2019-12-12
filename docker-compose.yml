@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: my_secret_pw_shh
+      MYSQL_DATABASE: geonames
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: pass
+    ports:
+      - "9906:3306"
+    volumes:
+      - ./dump:/docker-entrypoint-initdb.d
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    depends_on:
+    - db
+    external_links:
+    - db:mysql
+    ports:
+    - "9191:80"
+    environment:
+      MYSQL_ROOT_PASSWORD: my_secret_pw_shh
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: pass
+      PMA_HOST: db
